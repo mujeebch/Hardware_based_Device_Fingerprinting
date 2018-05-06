@@ -1,0 +1,212 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>lit301_normal_data_pattern</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-23"><meta name="DC.source" content="lit301_normal_data_pattern.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">calculating the average reference pattern</a></li></ul></div><pre class="codeinput">clear
+clc
+
+lit301=csvread(<span class="string">'LIT301_6days_dec_2015.csv'</span>);
+
+<span class="comment">%plot(lit301)</span>
+
+<span class="comment">%</span>
+
+<span class="comment">% pick chunks of lets say 50k readings, bc some data was not as clean</span>
+
+lit301_1=lit301(20000:32000);
+lit301_2=lit301(38000:55000);
+lit301_3=lit301(72000:140000);
+<span class="comment">%lit301_4=lit301(140000:180000); % 200,000</span>
+lit301_5=lit301(200000:260000);
+lit301_6=lit301(260000:300000);
+lit301_7=lit301(300000:340000);
+lit301_8=lit301(420000:436000);
+lit301_9=lit301(450000:490000);
+
+col = 0; <span class="comment">% to control the columns of each vector</span>
+run = 1; <span class="comment">% to control the rows of each fill vector</span>
+count=1; <span class="comment">% to control boundary points, when we exit loop...take actions based on this flag</span>
+i=1;     <span class="comment">% loop variable</span>
+a=0;     <span class="comment">% flag to capture the lower limit of desired data, to avoid problem due to nosie etc</span>
+
+[model1_lit301,measured1_lit301]=DEF(lit301_1,count,col,run);
+[model2_lit301,measured2_lit301]=DEF(lit301_2,count,col,run);
+<span class="comment">%[model3,measured3]=DEF(lit301_3,count,col,run);</span>
+<span class="comment">%[model4,measured4]=DEF(lit301_4,count,col,run);</span>
+[model5_lit301,measured5_lit301]=DEF(lit301_5,count,col,run);
+[model6_lit301,measured6_lit301]=DEF(lit301_6,count,col,run);
+[model7_lit301,measured7_lit301]=DEF(lit301_7,count,col,run);
+[model8_lit301,measured8_lit301]=DEF(lit301_8,count,col,run);
+[model9_lit301,measured9_lit301]=DEF(lit301_9,count,col,run);
+
+
+noise1_lit301=abs(model1_lit301-measured1_lit301);
+noise2_lit301=abs(model2_lit301 - measured2_lit301);
+<span class="comment">%noise3=abs(model3 - measured3);</span>
+<span class="comment">%nosie4=abs(model4 - measured4);</span>
+noise5_lit301=abs(model5_lit301 - measured5_lit301);
+noise6_lit301=abs(model6_lit301 - measured6_lit301);
+noise7_lit301=abs(model7_lit301 - measured7_lit301);
+noise8_lit301=abs(model8_lit301 - measured8_lit301);
+noise9_lit301=abs(model9_lit301 - measured9_lit301);
+
+<span class="comment">% this segment finds the min of length of the all noise vectors so that we can cascade them to that much value</span>
+
+min_len_lit301=min([length(noise1_lit301),length(noise2_lit301),length(noise5_lit301),length(noise6_lit301),length(noise7_lit301),length(noise8_lit301),length(noise9_lit301)]);
+<span class="comment">% cascading all vectors in one matrix according to the min len of all</span>
+noise_lit301=[noise1_lit301(:,1:min_len_lit301);noise2_lit301(:,1:min_len_lit301);noise5_lit301(:,1:min_len_lit301);noise6_lit301(:,1:min_len_lit301);noise7_lit301(:,1:min_len_lit301);noise8_lit301(:,1:min_len_lit301);noise9_lit301(:,1:min_len_lit301)];
+
+noise_lit301_gv=[noise_lit301(1:7,:);noise_lit301(9:24,:);noise_lit301(27:55,:)]; <span class="comment">% gv stands for good values, there are some anomalies like short vecotrs or similar. Removing those</span>
+<span class="keyword">for</span> j=1:1:88 <span class="comment">% loops runs number of rows of noise vector</span>
+    <span class="comment">%pause(1)</span>
+    hold <span class="string">on</span>
+    figure(1); plot(noise_lit301_gv(j,1:800)) <span class="comment">%plotting all the vectors</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput error">Index exceeds matrix dimensions.
+
+Error in lit301_normal_data_pattern (line 59)
+    figure(1); plot(noise_lit301_gv(j,1:800)) %plotting all the vectors
+</pre><h2>calculating the average reference pattern<a name="2"></a></h2><pre class="codeinput">len_lit301=size(noise_lit301_gv);
+avg_noise_6_days_lit301=sum(noise_lit301_gv)/len_lit301(1);
+hold <span class="string">on</span>
+figure(2);
+plot(avg_noise_6_days_lit301(:,1:800),<span class="string">'-r'</span>)
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+clear
+clc
+
+lit301=csvread('LIT301_6days_dec_2015.csv');
+
+%plot(lit301)
+
+%
+
+% pick chunks of lets say 50k readings, bc some data was not as clean
+
+lit301_1=lit301(20000:32000);
+lit301_2=lit301(38000:55000);
+lit301_3=lit301(72000:140000);
+%lit301_4=lit301(140000:180000); % 200,000
+lit301_5=lit301(200000:260000);
+lit301_6=lit301(260000:300000);
+lit301_7=lit301(300000:340000);
+lit301_8=lit301(420000:436000);
+lit301_9=lit301(450000:490000);
+
+col = 0; % to control the columns of each vector
+run = 1; % to control the rows of each fill vector
+count=1; % to control boundary points, when we exit loop...take actions based on this flag
+i=1;     % loop variable
+a=0;     % flag to capture the lower limit of desired data, to avoid problem due to nosie etc
+
+[model1_lit301,measured1_lit301]=DEF(lit301_1,count,col,run);
+[model2_lit301,measured2_lit301]=DEF(lit301_2,count,col,run);
+%[model3,measured3]=DEF(lit301_3,count,col,run);
+%[model4,measured4]=DEF(lit301_4,count,col,run);
+[model5_lit301,measured5_lit301]=DEF(lit301_5,count,col,run);
+[model6_lit301,measured6_lit301]=DEF(lit301_6,count,col,run);
+[model7_lit301,measured7_lit301]=DEF(lit301_7,count,col,run);
+[model8_lit301,measured8_lit301]=DEF(lit301_8,count,col,run);
+[model9_lit301,measured9_lit301]=DEF(lit301_9,count,col,run);
+
+
+noise1_lit301=abs(model1_lit301-measured1_lit301);
+noise2_lit301=abs(model2_lit301 - measured2_lit301);
+%noise3=abs(model3 - measured3);
+%nosie4=abs(model4 - measured4);
+noise5_lit301=abs(model5_lit301 - measured5_lit301);
+noise6_lit301=abs(model6_lit301 - measured6_lit301);
+noise7_lit301=abs(model7_lit301 - measured7_lit301);
+noise8_lit301=abs(model8_lit301 - measured8_lit301);
+noise9_lit301=abs(model9_lit301 - measured9_lit301);
+
+% this segment finds the min of length of the all noise vectors so that we can cascade them to that much value
+
+min_len_lit301=min([length(noise1_lit301),length(noise2_lit301),length(noise5_lit301),length(noise6_lit301),length(noise7_lit301),length(noise8_lit301),length(noise9_lit301)]);
+% cascading all vectors in one matrix according to the min len of all
+noise_lit301=[noise1_lit301(:,1:min_len_lit301);noise2_lit301(:,1:min_len_lit301);noise5_lit301(:,1:min_len_lit301);noise6_lit301(:,1:min_len_lit301);noise7_lit301(:,1:min_len_lit301);noise8_lit301(:,1:min_len_lit301);noise9_lit301(:,1:min_len_lit301)];
+
+noise_lit301_gv=[noise_lit301(1:7,:);noise_lit301(9:24,:);noise_lit301(27:55,:)]; % gv stands for good values, there are some anomalies like short vecotrs or similar. Removing those
+for j=1:1:88 % loops runs number of rows of noise vector
+    %pause(1)
+    hold on
+    figure(1); plot(noise_lit301_gv(j,1:800)) %plotting all the vectors
+end
+
+
+%% calculating the average reference pattern
+len_lit301=size(noise_lit301_gv);
+avg_noise_6_days_lit301=sum(noise_lit301_gv)/len_lit301(1);
+hold on
+figure(2); 
+plot(avg_noise_6_days_lit301(:,1:800),'-r')
+
+
+
+##### SOURCE END #####
+--></body></html>
